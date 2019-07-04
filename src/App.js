@@ -6,7 +6,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      persons: [{ name: 'Max', age: 28 }, { name: 'Manu', age: 29 }]
+      persons: [{ name: 'Max', age: 28 }, { name: 'Manu', age: 29 }],
+      showPersons: false
     };
   }
 
@@ -22,6 +23,13 @@ class App extends Component {
     });
   };
 
+  togglePersonsHandler = () => {
+    const { showPersons } = this.state;
+    this.setState({
+      showPersons: !showPersons
+    });
+  };
+
   render() {
     const style = {
       backgroundColor: 'white',
@@ -31,28 +39,37 @@ class App extends Component {
       cursor: 'pointer'
     };
 
+    let persons;
+    if (this.state.showPersons) {
+      persons = (
+        <div>
+          <Person
+            name={this.state.persons[0].name}
+            age={this.state.persons[0].age}
+            click={this.switchNameHandler.bind(this, 'Blueblue')}
+          >
+            My hobby is breaking !
+          </Person>
+          <Person
+            name={this.state.persons[1].name}
+            age={this.state.persons[1].age}
+            click={this.switchNameHandler.bind(this, 'Banana')}
+            changed={this.nameChangeHandler}
+          >
+            I love rocketing !
+          </Person>
+        </div>
+      );
+    }
+
     return (
       <div className="App">
         <h1>Hi, I'am React </h1>
         <p>It is really working !</p>
-        <button onClick={() => this.switchNameHandler('Romain')} style={style}>
-          Switch Name
+        <button onClick={this.togglePersonsHandler} style={style}>
+          Toggle Persons
         </button>
-        <Person
-          name={this.state.persons[0].name}
-          age={this.state.persons[0].age}
-          click={this.switchNameHandler.bind(this, 'Blueblue')}
-        >
-          My hobby is breaking !
-        </Person>
-        <Person
-          name={this.state.persons[1].name}
-          age={this.state.persons[1].age}
-          click={this.switchNameHandler.bind(this, 'Banana')}
-          changed={this.nameChangeHandler}
-        >
-          I love rocketing !
-        </Person>
+        {persons}
       </div>
     );
   }
